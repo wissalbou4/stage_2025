@@ -12,20 +12,45 @@ use Illuminate\Http\Request;
 class CommandeController extends Controller
 {
     public function index()
-    {
-        $commandes = Commande::with(['client', 'etat', 'type'])->get();
-        $role = auth()->user()->etat->role;
+{
+    $role = auth()->user()->etat->role;
+    $search = request('search'); // <== ÉTAPE 1
 
-        if ($role === 'admin') {
-            return view('admin.commandes.index', compact('commandes'));
-        }
+    $query = Commande::with(['client', 'etat', 'type']);
 
-        if ($role === 'operateur') {
-            return view('operateur.commandes.index', compact('commandes'));
-        }
+    // <== ÉTAPE 2 : Ajoute la condition de recherche ici
+    if ($search) {
+        $query->whereHas('client', function ($q) use ($search) {
+            $q->where('nom', 'like', "%$search%")
+              ->orWhere('prenom', 'like', "%$search%");
+        });
+    }
 
+    // Conditions par rôle (comme dans ton code)
+    if ($role === 'operateur') {
+        $query->where('etat_id', Etat::where('etat', 'en saisie')->value('id'));
+    } elseif ($role === 'ramasseur') {
+        $query->where('etat_id', Etat::where('etat', 'en ramassage')->value('id'));
+    } elseif ($role === 'controleur') {
+        $query->where('etat_id', Etat::where('etat', 'Contrôle')->value('id'));
+    } elseif ($role === 'caissier') {
+        $query->where('etat_id', Etat::where('etat', 'Caisse')->value('id'));
+    } elseif ($role !== 'admin') {
         abort(403, 'Accès interdit');
     }
+
+    $commandes = $query->orderBy('created_at', 'desc')->get();
+
+    return match ($role) {
+        'admin' => view('admin.commandes.index', compact('commandes')),
+        'operateur' => view('operateur.commandes.index', compact('commandes')),
+        'ramasseur' => view('ramasseur.commandes.index', compact('commandes')),
+        'controleur' => view('controleur.commandes.index', compact('commandes')),
+        'caissier' => view('caissier.commandes.index', compact('commandes')),
+    };
+}
+
+    
 
     public function create()
     {

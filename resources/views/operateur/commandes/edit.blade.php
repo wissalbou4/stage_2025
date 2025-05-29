@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Modifier la commande (Admin)</h2>
+    <h2>Modifier la commande </h2>
 
     <form action="{{ route('operateur.commandes.update', $commande->id) }}" method="POST">
         @csrf @method('PUT')

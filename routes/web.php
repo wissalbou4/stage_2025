@@ -8,6 +8,10 @@ use App\Http\controllers\ClientController;
 use App\Http\Controllers\OperateurController;
 use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\PointageController;
+use App\Http\Controllers\CaissierController;
+use App\Http\Controllers\ControleController;
+use App\Http\Controllers\RamasseurController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,8 +32,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'login');
     Route::post('/logout', 'logout')->name('logout');
-    Route::get('/register', 'showRegisterForm')->name('register');
-    Route::post('/register', 'register');
+    
 });
 // redirection apres login==============
 Route::get('/dashboard', [AuthController::class, 'redirectToDashboard'])
@@ -55,6 +58,13 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/commandes/{commande}/edit', [CommandeController::class,'edit'])->name('admin.commandes.edit');
     Route::put('/commandes/{commande}', [CommandeController::class,'update'])->name('admin.commandes.update');
     Route::delete('/commandes/{commande}', [CommandeController::class,'destroy'])->name('admin.commandes.destroy');
+    Route::get('/pointage', [PointageController::class, 'index'])->name('admin.pointage.index');
+    Route::get('/pointage/show', [PointageController::class, 'show'])->name('admin.pointage.show');
+    Route::post('/pointage/store', [PointageController::class, 'store'])->name('admin.pointage.store');
+    Route::post('/pointage/user/update-etat', [PointageController::class, 'updateEtat'])->name('admin.pointage.user.update_etat');
+    Route::get('/admin/pointages/commande/{id}', [PointageController::class, 'historique'])->name('admin.pointage.historique');
+
+    
 });
 // Espace Opérateur
 Route::prefix('operateur')->middleware(['auth', 'role:operateur'])->group(function () {
@@ -69,25 +79,51 @@ Route::prefix('operateur')->middleware(['auth', 'role:operateur'])->group(functi
     Route::post('/commandes', [CommandeController::class,'store'])->name('operateur.commandes.store');
     Route::get('/commandes/{commande}/edit', [CommandeController::class,'edit'])->name('operateur.commandes.edit');
     Route::put('/commandes/{commande}', [CommandeController::class,'update'])->name('operateur.commandes.update');
+    Route::get('/pointage', [PointageController::class, 'index'])->name('operateur.pointage.index');
+Route::get('/pointage/show', [PointageController::class, 'show'])->name('operateur.pointage.show');
+Route::post('/pointage/store', [PointageController::class, 'store'])->name('operateur.pointage.store');
+Route::post('/pointage/user/update-etat', [PointageController::class, 'updateEtat'])->name('operateur.pointage.user.update_etat');
+
 });
 // Espace Ramasseur
 Route::prefix('ramasseur')->middleware(['auth', 'role:ramasseur'])->group(function () {
     Route::get('/dashboard', [RamasseurController::class, 'dashboard'])->name('ramasseur.dashboard');
+    Route::get('/commandes', [CommandeController::class, 'index'])->name('ramasseur.commandes.index');
+    Route::get('/pointage', [PointageController::class, 'index'])->name('ramasseur.pointage.index');
+Route::get('/pointage/show', [PointageController::class, 'show'])->name('ramasseur.pointage.show');
+Route::post('/pointage/store', [PointageController::class, 'store'])->name('ramasseur.pointage.store');
+Route::post('/pointage/user/update-etat', [PointageController::class, 'updateEtat'])->name('ramasseur.pointage.user.update_etat');
+
+
 });
 // Espace Controleur
 Route::prefix('controleur')->middleware(['auth', 'role:controleur'])->group(function () {
-    Route::get('/dashboard', [ControleurController::class, 'dashboard'])->name('controleur.dashboard');
+    Route::get('/dashboard', [ControleController::class, 'dashboard'])->name('controleur.dashboard');
+    Route::get('/commandes', [CommandeController::class, 'index'])->name('controleur.commandes.index');
+    Route::get('/pointage', [PointageController::class, 'index'])->name('controleur.pointage.index');
+Route::get('/pointage/show', [PointageController::class, 'show'])->name('controleur.pointage.show');
+Route::post('/pointage/store', [PointageController::class, 'store'])->name('controleur.pointage.store');
+Route::post('/pointage/user/update-etat', [PointageController::class, 'updateEtat'])->name('controleur.pointage.user.update_etat');
+
+
 });
 // Espace Caissier
 Route::prefix('caissier')->middleware(['auth', 'role:caissier'])->group(function () {
     Route::get('/dashboard', [CaissierController::class, 'dashboard'])->name('caissier.dashboard');
+    Route::get('/commandes', [CommandeController::class, 'index'])->name('caissier.commandes.index');
+    Route::get('/pointage', [PointageController::class, 'index'])->name('caissier.pointage.index');
+Route::get('/pointage/show', [PointageController::class, 'show'])->name('caissier.pointage.show');
+Route::post('/pointage/store', [PointageController::class, 'store'])->name('caissier.pointage.store');
+Route::post('/pointage/user/update-etat', [PointageController::class, 'updateEtat'])->name('caissier.pointage.user.update_etat');
+Route::post('/paiement', [CaissierController::class, 'enregistrerPaiement'])->name('caissier.paiement');
+
+
 });
 
 
-// web.php
-Route::get('/pointage', [PointageController::class, 'index'])->name('pointage.index');
-Route::get('/pointage/show', [PointageController::class, 'show'])->name('pointage.show');
-Route::post('/pointage/store', [PointageController::class, 'store'])->name('pointage.store');
-Route::post('/pointage/user/update-etat', [PointageController::class, 'updateEtat'])->name('pointage.user.update_etat');
-
+Route::get('/notification/read/{id}', function ($id) {
+    $notification = auth()->user()->notifications()->findOrFail($id);
+    $notification->markAsRead();
+    return redirect()->back();
+})->name('notification.read');
 

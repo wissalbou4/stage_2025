@@ -10,7 +10,7 @@
                 <i class="fas fa-user-circle me-1"></i> 
                 Bienvenue, <span class="fw-semibold text-primary">{{ $user->name }}</span> 
                 <span class="badge bg-primary bg-opacity-10 text-primary ms-2">
-                    <i class="fas fa-shield-alt me-1"></i>{{ $user->etat->etat }}
+                    <i class="fas fa-shield-alt me-1"></i>{{ $user->etat->role }}
                 </span>
             </p>
         </div>
@@ -19,7 +19,16 @@
                 <i class="fas fa-calendar-day me-2"></i>{{ now()->format('d M Y, H:i') }}
             </span>
         </div>
-    </div>
+    </div>@php
+        $notification = $user->unreadNotifications->first();
+    @endphp
+
+    @if($notification)
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            🔔 <strong>Notification :</strong> {{ $notification->data['message'] ?? 'Nouvelle mise à jour' }}
+            <a href="{{ route('notification.read', $notification->id) }}" class="btn-close" aria-label="Fermer"></a>
+        </div>
+    @endif
 
     <!-- Stats Cards Section -->
     <div class="row g-4 mb-4">
@@ -163,7 +172,90 @@
         </div>
     </div>
 
-
+    <!-- Additional Statistics Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <h4 class="fw-bold mb-3">
+                <i class="fas fa-chart-line me-2"></i>Statistiques Globales
+            </h4>
+            <div class="row g-4">
+                <!-- Clients Card -->
+                <div class="col-xl-3 col-lg-6 col-md-6">
+                    <div class="card border-start border-purple border-4 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-purple bg-opacity-10 p-3 rounded me-3">
+                                    <i class="fas fa-user-friends"  data-fallback="C"></i> <!-- Icône plus spécifique -->
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Total Clients</h6>
+                                    <h2 class="mb-0 fw-bold">{{ $totalClients }}</h2>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <a href="{{ route('admin.clients.index') }}"
+                                class="badge rounded-pill text-white text-decoration-none px-3 py-2 d-inline-flex align-items-center"
+                                style="background-color: #6f42c1; transition: all 0.3s ease;">
+                                    <i class="fas fa-eye me-2"></i> Voir tous
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Commandes Card -->
+                <div class="col-xl-3 col-lg-6 col-md-6">
+                    <div class="card border-start border-orange border-4 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-orange bg-opacity-10 p-3 rounded me-3">
+                                    <i class="fas fa-shopping-basket" data-fallback="CMD"></i> <!-- Icône plus appropriée -->
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Total Commandes</h6>
+                                    <h2 class="mb-0 fw-bold">{{ $totalCommandes }}</h2>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <a href="{{ route('admin.commandes.index') }}"
+                                class="badge rounded-pill text-white text-decoration-none px-3 py-2 d-inline-flex align-items-center"
+                                style="background-color: #fd7e14; transition: all 0.3s ease;">
+                                    <i class="fas fa-list me-2"></i> Voir toutes
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pointage Today Card -->
+                <div class="col-xl-3 col-lg-6 col-md-6">
+                    <div class="card border-start border-teal border-4 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-teal bg-opacity-10 p-3 rounded me-3">
+                                    <i class="fas fa-fingerprint" 
+   data-fallback="P"></i> <!-- Icône plus moderne -->
+                                </div>
+                                <div>
+                                    <h6 class="text-muted mb-1">Pointages Aujourd'hui</h6>
+                                    <h2 class="mb-0 fw-bold">{{ $pointagesToday }}</h2>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <a href="#"
+                                class="badge rounded-pill text-white text-decoration-none px-3 py-2 d-inline-flex align-items-center"
+                                style="background-color: #20c997; transition: all 0.3s ease;">
+                                    <i class="fas fa-history me-2"></i> Voir détails
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
 
 </div>
 
@@ -183,6 +275,22 @@
     .list-group-item:hover {
         background-color: #f8f9fa;
     }
+    /* Custom colors */
+    .border-purple { border-color: #6f42c1 !important; }
+    .text-purple { color: #6f42c1 !important; }
+    .bg-purple { background-color: #6f42c1 !important; }
+    
+    .border-orange { border-color: #fd7e14 !important; }
+    .text-orange { color: #fd7e14 !important; }
+    .bg-orange { background-color: #fd7e14 !important; }
+    
+    .border-teal { border-color: #20c997 !important; }
+    .text-teal { color: #20c997 !important; }
+    .bg-teal { background-color: #20c997 !important; }
+    
+    .border-pink { border-color: #d63384 !important; }
+    .text-pink { color: #d63384 !important; }
+    .bg-pink { background-color: #d63384 !important; }
 </style>
 @endpush
 @endsection

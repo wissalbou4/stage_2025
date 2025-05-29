@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('etat')->orderBy('created_at', 'desc')->paginate(10);
+        $users = User::with('etat')->orderBy('created_at', 'desc')->get();
         return view('admin.users.index', compact('users'));
     }
 

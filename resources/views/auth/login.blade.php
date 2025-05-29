@@ -202,9 +202,7 @@
             
     
             
-            <div class="text-center">
-                <p class="mb-0">Pas encore de compte? <a href="{{ route('register') }}" class="text-decoration-none fw-medium">S'inscrire</a></p>
-            </div>
+            
         </div>
     </div>
     

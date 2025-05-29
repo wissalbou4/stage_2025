@@ -5,17 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pointage extends Model
+class Paiement extends Model
 {
     use HasFactory;
-    protected $guarded = ["id"];
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $fillable = ['commande_id', 'user_id', 'montant'];
 
     public function commande()
     {
         return $this->belongsTo(Commande::class);
+    }
+
+    public function caissier()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

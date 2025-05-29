@@ -21,4 +21,8 @@ class Commande extends Model
     public function type(){
         return $this->belongsTo(Type::class);
     }
+    public function paiement()
+    {
+        return $this->hasOne(Paiement::class);
+    }
 }

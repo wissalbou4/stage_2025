@@ -27,48 +27,6 @@ class AuthController extends Controller
             'email' => 'Identifiants incorrects.',
         ]);
     }
-
-    public function showRegisterForm()
-    {
-        $etats = Etat::all();
-        return view('auth.register', compact('etats'));
-    }
-
-    public function register(Request $request)
-    {
-        // Validation des données
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'etat_id' => 'required|exists:etats,id',
-            
-        ]);
-
-        // Générer un code barre unique
-        $codeBarre = mt_rand(10000000, 99999999);
-
-        // Vérifier si le code barre existe déjà dans la base de données
-        while ($this->codeBarreExists($codeBarre)) {
-            // Si oui, on génère un autre code barre
-            $codeBarre = mt_rand(10000000, 99999999);
-        }
-
-        // Ajouter le code barre au request
-        $request['code_barre'] = $codeBarre;
-
-        // Créer l'utilisateur
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'etat_id' => $request->etat_id,
-            'code_barre' => $codeBarre, // Ajouter le code barre ici
-        ]);
-
-        return redirect('/login')->with('success', 'Compte créé avec succès!');
-    }
-
     public function redirectToDashboard()
     {
         $user = auth()->user();

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Liste des commandes (Admin)</h2>
+    <h2>Liste des commandes</h2>
     <a href="{{ route('operateur.commandes.create') }}" class="btn btn-primary mb-3">Créer une commande</a>
 
     @if(session('success'))
@@ -12,6 +12,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
+                <th>num_com</th>
                 <th>Code Barre</th>
                 <th>Date</th>
                 <th>Sexe</th>
@@ -24,6 +25,7 @@
         <tbody>
             @foreach($commandes as $commande)
             <tr>
+                <td>{{ $commande->id }}</td>
                 <td>{{ $commande->code_barre }}</td>
                 <td>{{ $commande->date }}</td>
                 <td>{{ $commande->sexe }}</td>

@@ -34,10 +34,22 @@
                         <i class="fas fa-users me-2"></i>Liste-Commandes
                     </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::routeIs('admin.pointage.index') ? 'active' : '' }}"
+                        href="{{ route('admin.pointage.index') }}">
+                            <i class="fas fa-clock me-2"></i>Pointage
+                        </a>
+                    </li>
+                    
 
                     @endif
                     @if(auth()->user()->hasRole('operateur'))
-
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('operateur/dashboard') ? 'active' : '' }}" 
+                            href="{{ route('operateur.dashboard') }}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li> 
                     <li class="nav-item">
                     <a class="nav-link {{ Request::is('operateur/clients*') ? 'active' : '' }}"
                     href="{{ route('operateur.clients.index') }}">
@@ -50,15 +62,33 @@
                             <i class="fas fa-shopping-cart"></i> Commandes
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('operateur/pointage*') ? 'active' : '' }}"
+                        href="{{ route('operateur.pointage.index') }}">
+                            <i class="fas fa-clock me-2"></i>Pointage
+                        </a>
+                    </li>
                     
                     
                     @endif
                 
 
                 @if(auth()->user()->hasRole('ramasseur'))
+                <li class="nav-item">
+                        <a class="nav-link {{ Request::is('ramasseur/dashboard') ? 'active' : '' }}" 
+                            href="{{ route('ramasseur.dashboard') }}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li> 
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('ramasseur/commandes*') ? 'active' : '' }}" href="{{ route('ramasseur.commandes.index') }}">
                             <i class="fas fa-shopping-cart"></i> Commandes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('ramasseur/pointage*') ? 'active' : '' }}"
+                        href="{{ route('ramasseur.pointage.index') }}">
+                            <i class="fas fa-clock me-2"></i>Pointage
                         </a>
                     </li>
 
@@ -66,9 +96,21 @@
                 @endif
 
                 @if(auth()->user()->hasRole('controleur'))
+                <li class="nav-item">
+                        <a class="nav-link {{ Request::is('controleur/dashboard') ? 'active' : '' }}" 
+                            href="{{ route('controleur.dashboard') }}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li> 
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('controleur/commandes*') ? 'active' : '' }}" href="{{ route('controleur.commandes.index') }}">
                             <i class="fas fa-shopping-cart"></i> Commandes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('controleur/pointage*') ? 'active' : '' }}"
+                        href="{{ route('controleur.pointage.index') }}">
+                            <i class="fas fa-clock me-2"></i>Pointage
                         </a>
                     </li>
 
@@ -76,9 +118,21 @@
                 @endif
 
                 @if(auth()->user()->hasRole('caissier'))
+                <li class="nav-item">
+                        <a class="nav-link {{ Request::is('caissier/dashboard') ? 'active' : '' }}" 
+                            href="{{ route('caissier.dashboard') }}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li> 
                     <li class="nav-item">
                         <a class="nav-link {{ Request::is('caissier/commandes*') ? 'active' : '' }}" href="{{ route('caissier.commandes.index') }}">
                             <i class="fas fa-shopping-cart"></i> Commandes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::is('caissier/pointage*') ? 'active' : '' }}"
+                        href="{{ route('caissier.pointage.index') }}">
+                            <i class="fas fa-clock me-2"></i>Pointage
                         </a>
                     </li>
 
